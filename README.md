@@ -2,6 +2,8 @@
 
 VueKnober - a knob ui component
 
+![vue-knobe](https://raw.githubusercontent.com/shiasn/vue-knober/master/docs/images/vue-knober.gif)
+
 ## Usage
 
 | prop | describe | default |
