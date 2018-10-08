@@ -7,6 +7,8 @@
       primary-color="darkcyan"
       diff-color="lightblue"
       quench-color="lightslategray"
+      background-color="#fff"
+      shadow-color="black"
     />
     <knober
       v-model="level"
