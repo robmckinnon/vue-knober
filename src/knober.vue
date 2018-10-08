@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { throttle } from 'lodash';
+import throttle from 'lodash.throttle';
 
 export default {
   name: 'lamp-control',
@@ -56,9 +56,8 @@ export default {
     this.knobSize = this.chassisSize * .4;
   },
   methods: {
-    calculateRenderParams (e) {
+    calculateRenderParams (x, y) {
       const size = this.size;
-      const { offsetX: x, offsetY: y } = e;
       const coorX = x - size / 2;
       const coorY = y - size / 2;
       const r = Math.sqrt(Math.pow(Math.abs(coorX), 2) + Math.pow(Math.abs(coorY), 2));
@@ -73,8 +72,8 @@ export default {
         coorY
       };
     },
-    move: throttle(function (e) {
-      const { angle, r, coorX, coorY } = this.calculateRenderParams(e);
+    move: throttle(function (config) {
+      const { angle, r, coorX, coorY } = config;
       if (angle < -180) {
         angle = Math.abs(angle + 360);
       }
@@ -99,9 +98,11 @@ export default {
 
       return newVal && newVal.toFixed(0);
     },
-    press (e) {
-      const { angle, r, coorX, coorY } = this.calculateRenderParams(e);
+    press (config) {
+      const { angle, r, coorX, coorY } = config;
       const val = this.calculateValue(angle);
+
+      if (r > this.chassisSize) return;
 
       if (r <= this.knobSize) {
         this.currentValue > 0 ? (this.currentValue = 0) : (this.currentValue = 255);
@@ -375,10 +376,19 @@ export default {
   },
   mounted () {
     this.ctx = this.$el.getContext('2d');
-
-    this.$el.addEventListener('mousemove', this.move, false);
+    this.$el.addEventListener('mousemove', (e) => this.move(this.calculateRenderParams(e.offsetX, e.offsetY)), false);
     this.$el.addEventListener('mouseout', () => this.draw(), false);
-    this.$el.addEventListener('click', this.press, false);
+    this.$el.addEventListener('click', (e) => this.press(this.calculateRenderParams(e.offsetX, e.offsetY)), false);
+    this.$el.addEventListener('touchmove', (e) => {
+      console.log('in touch');
+      const { pageX, pageY } = e.changedTouches[0];
+      this.move(this.calculateRenderParams(pageX, pageY));
+    }, false);
+    this.$el.addEventListener('touchend', (e) => {
+      console.log('in touch');
+      const { pageX, pageY } = e.changedTouches[0];
+      this.press(this.calculateRenderParams(pageX, pageY))
+    })
 
     this.$watch(
       'currentValue',
