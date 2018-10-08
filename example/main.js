@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import Vue from 'vue';
 import App from './app.vue';
-import VueKnober from '../dist/vue-knober.min';
+import VueKnober from '../src';
 
 Vue.component('knober', VueKnober);
 Vue.config.debug = true;
