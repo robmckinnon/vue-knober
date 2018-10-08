@@ -60,7 +60,7 @@ export default {
   },
   created () {
     const size = Number(this.size);
-    this.margin = size * .05;
+    this.margin = size * .1;
     this.chassisSize = size / 2 - this.margin;
     this.knobSize = this.chassisSize * .4;
   },
@@ -386,12 +386,16 @@ export default {
     this.$el.addEventListener('mouseout', () => this.draw(), false);
     this.$el.addEventListener('click', (e) => this.press(this.calculateRenderParams(e.offsetX, e.offsetY)), false);
     this.$el.addEventListener('touchmove', (e) => {
+      e.preventDefault();
       const { pageX, pageY } = e.changedTouches[0];
-      this.move(this.calculateRenderParams(pageX, pageY));
+      const { x, y } = this.$el.getBoundingClientRect();
+      this.move(this.calculateRenderParams(pageX - (window.scrollX + x), pageY - (window.scrollY + y)));
     }, false);
     this.$el.addEventListener('touchend', (e) => {
+      e.preventDefault();
       const { pageX, pageY } = e.changedTouches[0];
-      this.press(this.calculateRenderParams(pageX, pageY))
+      const { x, y } = this.$el.getBoundingClientRect();
+      this.press(this.calculateRenderParams(pageX - (window.scrollX + x), pageY - (window.scrollY + y)))
     })
 
     this.$watch(
