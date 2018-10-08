@@ -1,4 +1,4 @@
-# vue-knober v1.0.1
+# vue-knober v1.0.3
 
 > VueKnober - a knob ui component
 
