@@ -1,11 +1,9 @@
 <template>
-  <!-- <Card class="lamp-control" :bordered="false"> -->
   <canvas
     ref="canvas"
     :width="Number(this.size)"
     :height="Number(this.size)">
   </canvas>
-  <!-- </Card> -->
 </template>
 
 <script>
@@ -51,6 +49,14 @@ export default {
     quenchColor: {
       type: String,
       default: '#eee'
+    },
+    backgroundColor: {
+      type: String,
+      default: '#fff'
+    },
+    shadowColor: {
+      type: String,
+      default: '#aaa'
     }
   },
   computed: {
@@ -159,10 +165,10 @@ export default {
         ctx.beginPath();
         ctx.arc(0, 0, size, 0, Math.PI * 2, true);
         ctx.shadowBlur = blur;
-        ctx.shadowColor = '#aaa';
+        ctx.shadowColor = self.shadowColor;
         ctx.shadowOffsetX = offset;
         ctx.shadowOffsetY = offset;
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = self.backgroundColor;
         ctx.fill();
         ctx.closePath();
         ctx.restore();
@@ -246,8 +252,8 @@ export default {
         ctx.shadowBlur = chassisSize * .16;
         ctx.shadowOffsetX = chassisSize * .03;
         ctx.shadowOffsetY = chassisSize * .03;
-        ctx.shadowColor = '#ccc';
-        ctx.fillStyle = '#fff';
+        ctx.shadowColor = self.shadowColor;
+        ctx.fillStyle = self.backgroundColor;
         ctx.fill();
         ctx.closePath();
         ctx.restore();
