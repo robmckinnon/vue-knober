@@ -6,6 +6,7 @@ const webpackBaseConfig = require('./webpack.config.base');
 process.env.NODE_ENV = 'production';
 
 module.exports = merge(webpackBaseConfig, {
+  mode: 'production',
   devtool: 'source-map',
   entry: {
     main: './src/index.js'
