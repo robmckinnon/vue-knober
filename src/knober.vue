@@ -380,12 +380,10 @@ export default {
     this.$el.addEventListener('mouseout', () => this.draw(), false);
     this.$el.addEventListener('click', (e) => this.press(this.calculateRenderParams(e.offsetX, e.offsetY)), false);
     this.$el.addEventListener('touchmove', (e) => {
-      console.log('in touch');
       const { pageX, pageY } = e.changedTouches[0];
       this.move(this.calculateRenderParams(pageX, pageY));
     }, false);
     this.$el.addEventListener('touchend', (e) => {
-      console.log('in touch');
       const { pageX, pageY } = e.changedTouches[0];
       this.press(this.calculateRenderParams(pageX, pageY))
     })
