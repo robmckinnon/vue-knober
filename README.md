@@ -32,4 +32,6 @@ Vue.component('vue-knober', VueKnober);
 | primaryColor | primary color | `string` | #79bd9a |
 | diffColor | diff color | `string` | #cff0da |
 | quenchColor | quanch color | `string` | #eee |
+| backgroundColor | background color | `string` | #fff |
+| shadowColor | shadow color | `string` | #aaa |
 
