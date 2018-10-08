@@ -36,7 +36,7 @@ module.exports = merge(webpackBaseConfig, {
       filename: '[path].gz[query]',
       algorithm: 'gzip',
       test: /\.(js|css)$/,
-      threshold: 10240,
+      threshold: 8192,
       minRatio: 0.8
     })
   ]
