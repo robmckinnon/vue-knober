@@ -1,4 +1,4 @@
-# vue-knober v1.0.3
+# vue-knober v1.0.4
 
 > VueKnober - a knob ui component
 
@@ -16,7 +16,7 @@ npm install -S vue-knober
 
 import Vue form 'vue';
 import VueKnober from 'vue-knober';
-Vue.component(VueKnober);
+Vue.component('vue-knober', VueKnober);
 ```
 
 ```html
