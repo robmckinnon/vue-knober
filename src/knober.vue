@@ -378,7 +378,12 @@ export default {
 
       this.initialAngle = angle;
       this.draw();
-    }
+    },
+    mobilePosition (e) {
+      const { pageX, pageY } = e.changedTouches[0];
+      const { x, y } = this.$el.getBoundingClientRect();
+      return [pageX - (window.scrollX + x), pageY - (window.scrollY + y)]
+    },
   },
   mounted () {
     this.ctx = this.$el.getContext('2d');
@@ -387,15 +392,11 @@ export default {
     this.$el.addEventListener('click', (e) => this.press(this.calculateRenderParams(e.offsetX, e.offsetY)), false);
     this.$el.addEventListener('touchmove', (e) => {
       e.preventDefault();
-      const { pageX, pageY } = e.changedTouches[0];
-      const { x, y } = this.$el.getBoundingClientRect();
-      this.move(this.calculateRenderParams(pageX - (window.scrollX + x), pageY - (window.scrollY + y)));
+      this.move(this.calculateRenderParams(...this.mobilePosition(e)));
     }, false);
     this.$el.addEventListener('touchend', (e) => {
       e.preventDefault();
-      const { pageX, pageY } = e.changedTouches[0];
-      const { x, y } = this.$el.getBoundingClientRect();
-      this.press(this.calculateRenderParams(pageX - (window.scrollX + x), pageY - (window.scrollY + y)))
+      this.press(this.calculateRenderParams(...this.mobilePosition(e)))
     })
 
     this.$watch(
