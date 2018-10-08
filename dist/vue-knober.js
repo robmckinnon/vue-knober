@@ -119,19 +119,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: 'lamp-control',
+  name: 'vue-knober',
   data: function () {
     return {
-      width: 0,
-      height: 0,
-      brightness: Number(this.value || 0),
-      margin: 25,
+      margin: 0,
       chassisSize: 0,
       knobSize: 0,
       ctx: null,
-      start: null,
-      maxAngle: -30,
-      minAngle: -150,
       initialAngle: -30,
       currentValue: this.value
     };
@@ -152,9 +146,26 @@ __webpack_require__.r(__webpack_exports__);
     max: {
       type: [String, Number],
       default: 255
+    },
+    primaryColor: {
+      type: String,
+      default: '#79bd9a'
+    },
+    diffColor: {
+      type: String,
+      default: '#cff0da'
+    },
+    quenchColor: {
+      type: String,
+      default: '#eee'
     }
   },
-  watch: {},
+  computed: {
+    range() {
+      return this.max - this.min;
+    }
+
+  },
 
   created() {
     const size = Number(this.size);
@@ -205,7 +216,7 @@ __webpack_require__.r(__webpack_exports__);
     }),
 
     calculateValue(angle) {
-      const base = (this.max - this.min) / 240;
+      const base = this.range / 240;
       let newVal;
 
       if (angle > 0) {
@@ -216,7 +227,8 @@ __webpack_require__.r(__webpack_exports__);
         newVal = base * (210 + angle + 180);
       }
 
-      return newVal && newVal.toFixed(0);
+      newVal = Number(newVal && newVal.toFixed(0));
+      return newVal + Number(this.min);
     },
 
     press(config) {
@@ -230,7 +242,7 @@ __webpack_require__.r(__webpack_exports__);
       if (r > this.chassisSize) return;
 
       if (r <= this.knobSize) {
-        this.currentValue > 0 ? this.currentValue = 0 : this.currentValue = 255;
+        this.currentValue > Number(this.min) ? this.currentValue = this.min : this.currentValue = this.max;
         return;
       }
 
@@ -291,7 +303,7 @@ __webpack_require__.r(__webpack_exports__);
         ctx.moveTo(-size * .6, 0);
         ctx.lineTo(-size * .9, 0);
         ctx.lineWidth = self.size * .015;
-        ctx.strokeStyle = '#63b98b';
+        ctx.strokeStyle = self.primaryColor;
         ctx.stroke();
         ctx.closePath();
         ctx.restore();
@@ -299,13 +311,13 @@ __webpack_require__.r(__webpack_exports__);
 
       function drawSwitch() {
         const switchSize = self.knobSize * .3;
-        let color = '#ccc';
+        let color = self.quenchColor;
 
         if (r < self.knobSize) {
           if (self.currentValue > 0) {
             color = '#fe4365';
           } else {
-            color = '#79bd9a';
+            color = self.primaryColor;
           }
         }
 
@@ -368,10 +380,6 @@ __webpack_require__.r(__webpack_exports__);
 
       function drawTicks() {
         const gap = 240 / 30;
-        const diffColor = '#cff0da';
-        const diffShadowColor = '#cff0da';
-        const primaryColor = '#79bd9a';
-        const primaryShadowColor = '#79bd9a';
         ctx.save();
         ctx.translate(size / 2, size / 2);
         ctx.rotate(-30 * Math.PI / 180);
@@ -384,7 +392,7 @@ __webpack_require__.r(__webpack_exports__);
 
           const _angle = i * gap;
 
-          let color = '#eee';
+          let color = self.quenchColor;
           let shadowColor = '#fff';
 
           const setColor = (c, shadow) => () => {
@@ -392,8 +400,8 @@ __webpack_require__.r(__webpack_exports__);
             shadowColor = shadow;
           };
 
-          const setDiffColor = setColor(diffColor, diffShadowColor);
-          const setPrimaryColor = setColor(primaryColor, primaryShadowColor);
+          const setDiffColor = setColor(self.diffColor, self.diffColor);
+          const setPrimaryColor = setColor(self.primaryColor, self.primaryColor);
 
           if (angle) {
             if (r > self.knobSize) {
@@ -484,8 +492,7 @@ __webpack_require__.r(__webpack_exports__);
 
     watchCurrentValueHandler(val) {
       const randerScale = 240;
-      const scale = this.max - this.min;
-      let angle = randerScale / scale * val - 30;
+      let angle = randerScale / this.range * (val - this.min) - 30;
 
       if (angle > 180) {
         angle -= 360;
@@ -519,8 +526,7 @@ __webpack_require__.r(__webpack_exports__);
     this.$watch('currentValue', val => {
       this.$emit('input', val);
       const randerScale = 240;
-      const scale = this.max - this.min;
-      const angle = randerScale / scale * val - 30;
+      const angle = randerScale / this.range * (val - this.min) - 30;
       this.initialAngle = angle;
       this.draw();
     }, {
@@ -983,9 +989,9 @@ module.exports = throttle;
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/knober.vue?vue&type=template&id=4ba986a0&":
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/knober.vue?vue&type=template&id=7e671886&":
 /*!*************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/knober.vue?vue&type=template&id=4ba986a0& ***!
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/knober.vue?vue&type=template&id=7e671886& ***!
   \*************************************************************************************************************************************************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -1168,7 +1174,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _knober_vue_vue_type_template_id_4ba986a0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./knober.vue?vue&type=template&id=4ba986a0& */ "./src/knober.vue?vue&type=template&id=4ba986a0&");
+/* harmony import */ var _knober_vue_vue_type_template_id_7e671886___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./knober.vue?vue&type=template&id=7e671886& */ "./src/knober.vue?vue&type=template&id=7e671886&");
 /* harmony import */ var _knober_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./knober.vue?vue&type=script&lang=js& */ "./src/knober.vue?vue&type=script&lang=js&");
 /* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
@@ -1180,8 +1186,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
   _knober_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _knober_vue_vue_type_template_id_4ba986a0___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _knober_vue_vue_type_template_id_4ba986a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  _knober_vue_vue_type_template_id_7e671886___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _knober_vue_vue_type_template_id_7e671886___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
   null,
   null,
@@ -1208,19 +1214,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/knober.vue?vue&type=template&id=4ba986a0&":
+/***/ "./src/knober.vue?vue&type=template&id=7e671886&":
 /*!*******************************************************!*\
-  !*** ./src/knober.vue?vue&type=template&id=4ba986a0& ***!
+  !*** ./src/knober.vue?vue&type=template&id=7e671886& ***!
   \*******************************************************/
 /*! exports provided: render, staticRenderFns */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_knober_vue_vue_type_template_id_4ba986a0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib??vue-loader-options!./knober.vue?vue&type=template&id=4ba986a0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/knober.vue?vue&type=template&id=4ba986a0&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_knober_vue_vue_type_template_id_4ba986a0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_knober_vue_vue_type_template_id_7e671886___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../node_modules/vue-loader/lib??vue-loader-options!./knober.vue?vue&type=template&id=7e671886& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/knober.vue?vue&type=template&id=7e671886&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_knober_vue_vue_type_template_id_7e671886___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_knober_vue_vue_type_template_id_4ba986a0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_knober_vue_vue_type_template_id_7e671886___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
