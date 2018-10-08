@@ -12,19 +12,13 @@
 import throttle from 'lodash.throttle';
 
 export default {
-  name: 'lamp-control',
+  name: 'vue-knober',
   data: function () {
     return {
-      width: 0,
-      height: 0,
-      brightness: Number(this.value || 0),
-      margin: 25,
+      margin: 0,
       chassisSize: 0,
       knobSize: 0,
       ctx: null,
-      start: null,
-      maxAngle: -30,
-      minAngle: -150,
       initialAngle: -30,
       currentValue: this.value
     };
@@ -45,9 +39,24 @@ export default {
     max: {
       type: [String, Number],
       default: 255
+    },
+    primaryColor: {
+      type: String,
+      default: '#79bd9a'
+    },
+    diffColor: {
+      type: String,
+      default: '#cff0da'
+    },
+    quenchColor: {
+      type: String,
+      default: '#eee'
     }
   },
-  watch: {
+  computed: {
+    range () {
+      return this.max - this.min;
+    }
   },
   created () {
     const size = Number(this.size);
@@ -85,7 +94,7 @@ export default {
       }
     }, 40, { 'trailing': false }),
     calculateValue (angle ) {
-      const base = ((this.max - this.min) / 240);
+      const base = (this.range / 240);
       let newVal;
 
       if (angle > 0) {
@@ -96,7 +105,9 @@ export default {
         newVal = base * (210 + angle + 180);
       }
 
-      return newVal && newVal.toFixed(0);
+      newVal = Number(newVal && newVal.toFixed(0))
+
+      return newVal + Number(this.min);
     },
     press (config) {
       const { angle, r, coorX, coorY } = config;
@@ -105,7 +116,7 @@ export default {
       if (r > this.chassisSize) return;
 
       if (r <= this.knobSize) {
-        this.currentValue > 0 ? (this.currentValue = 0) : (this.currentValue = 255);
+        this.currentValue > Number(this.min) ? (this.currentValue = this.min) : (this.currentValue = this.max);
         return;
       }
 
@@ -166,7 +177,7 @@ export default {
         ctx.moveTo(-size * .6, 0);
         ctx.lineTo(-size * .9, 0);
         ctx.lineWidth = self.size * .015;
-        ctx.strokeStyle = '#63b98b';
+        ctx.strokeStyle = self.primaryColor;
         ctx.stroke();
         ctx.closePath();
 
@@ -174,13 +185,13 @@ export default {
       }
       function drawSwitch () {
         const switchSize = self.knobSize * .3;
-        let color = '#ccc';
+        let color = self.quenchColor;
 
         if (r < self.knobSize) {
           if (self.currentValue > 0) {
             color = '#fe4365';
           } else {
-            color = '#79bd9a';
+            color = self.primaryColor;
           }
         }
 
@@ -244,10 +255,6 @@ export default {
 
       function drawTicks () {
         const gap = 240 / 30;
-        const diffColor = '#cff0da';
-        const diffShadowColor = '#cff0da';
-        const primaryColor = '#79bd9a';
-        const primaryShadowColor = '#79bd9a';
 
         ctx.save();
         ctx.translate(size / 2, size / 2);
@@ -262,15 +269,15 @@ export default {
           const _angle = i * gap;
 
 
-          let color = '#eee';
+          let color = self.quenchColor;
           let shadowColor = '#fff';
 
           const setColor = (c, shadow) => () => {
             color = c;
             shadowColor = shadow;
           };
-          const setDiffColor = setColor(diffColor, diffShadowColor);
-          const setPrimaryColor = setColor(primaryColor, primaryShadowColor);
+          const setDiffColor = setColor(self.diffColor, self.diffColor);
+          const setPrimaryColor = setColor(self.primaryColor, self.primaryColor);
 
  
           if (angle) {
@@ -364,8 +371,7 @@ export default {
     },
     watchCurrentValueHandler (val) {
       const randerScale = 240;
-      const scale = this.max - this.min;
-      let angle = randerScale / scale * val - 30;
+      let angle = randerScale / this.range * (val - this.min) - 30;
       if (angle > 180) {
         angle -= 360;
       }
@@ -393,8 +399,7 @@ export default {
       (val) => {
         this.$emit('input', val);
         const randerScale = 240;
-        const scale = this.max - this.min;
-        const angle = randerScale / scale * val - 30;
+        const angle = randerScale / this.range * (val - this.min) - 30;
 
         this.initialAngle = angle;
         this.draw();
