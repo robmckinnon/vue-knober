@@ -4,7 +4,7 @@
 
 ## [Dome Online](https://www.shisaner.com/projects/vue-knober/)
 
-### laptop
+### Laptop
 ![vue-knobe](https://raw.githubusercontent.com/shiasn/vue-knober/master/docs/images/vue-knober.gif)
 ### Mobile
 ![vue-knobe](https://raw.githubusercontent.com/shiasn/vue-knober/master/docs/images/vue-knober-mobile.gif)
@@ -25,7 +25,7 @@ Vue.component(VueKnober);
 
 | prop | describe | type | default |
 | --- | --- | --- | --- |
-| size | define knob size | | 250(px) |
+| size | define knob size | `string` / `number` | 250(px) |
 | value | v-model | `string` / `number` | 0 |
 | min | minimum value | `string` / `number` | 0 |
 | max | maximum value | `string` / `number` | 255  |
