@@ -57,6 +57,10 @@ export default {
     shadowColor: {
       type: String,
       default: '#aaa'
+    },
+    fontColor: {
+      tyle: String,
+      default: '#999'
     }
   },
   computed: {
@@ -362,7 +366,7 @@ export default {
 
       ctx.translate(this.size / 2, this.size / 2 + this.chassisSize * .8);
 
-      ctx.fillStyle = '#999';
+      ctx.fillStyle = this.fontColor;
       ctx.textAlign = 'center';
       ctx.font = `${this.chassisSize * .3}px Arial`;
       ctx.fillText(val, 0, 0);
