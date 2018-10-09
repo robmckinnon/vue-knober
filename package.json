@@ -1,7 +1,7 @@
 {
   "name": "vue-knober",
   "title": "VueKnober",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A vue knob component",
   "main": "dist/vue-knober.js",
   "scripts": {

@@ -1,4 +1,4 @@
-# vue-knober v1.0.4
+# vue-knober v1.0.5
 
 > VueKnober - a knob ui component
 
@@ -34,4 +34,5 @@ Vue.component('vue-knober', VueKnober);
 | quenchColor | quanch color | `string` | #eee |
 | backgroundColor | background color | `string` | #fff |
 | shadowColor | shadow color | `string` | #aaa |
+| fontColor | font color | `string` | #999 |
 
